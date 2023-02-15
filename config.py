@@ -1,4 +1,4 @@
 """COM port path"""
 # COMx under Windows
 # /dev/ttySx under *nix
-port_path = "COM3"
+port_path = "/dev/ttyUSB1"

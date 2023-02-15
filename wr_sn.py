@@ -41,13 +41,13 @@ if not port.open():
 	exit("Can't open port !")
 
 old_sn = port.EscReadRegs(0x10, 0x0E)
-print "Old S/N:", old_sn
+print ("Old S/N:", old_sn)
 
 uid3 = unpack("<L", port.EscReadRegs(0xDE, 4))[0]
-print "UID3: %08X" % (uid3)
+print ("UID3: %08X" % (uid3))
 
 auth = CalcSnAuth(old_sn, new_sn, uid3)
-print "Auth: %08X"  % (auth)
+print ("Auth: %08X"  % (auth))
 
 port.EscWriteSN(new_sn, auth)
-print "OK"
+print ("OK")

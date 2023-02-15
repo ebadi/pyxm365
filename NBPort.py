@@ -8,7 +8,7 @@ from binascii import hexlify
 def checksum(data):
 	s = 0
 	for c in data:
-		s += ord(c)
+		s += c
 	return (s & 0xFFFF) ^ 0xFFFF
 
 
@@ -57,20 +57,20 @@ class NBPort(object):
 		for i in xrange(l):
 			pkt += self.com.read(1)
 		if self.dump:
-			print "<", hexlify("\x55\xAA"+pkt)
+			print ("<", hexlify("\x55\xAA"+pkt))
 		ck_calc = checksum(pkt[0:-2])
 		ck_pkt = unpack("<H", pkt[-2:])[0]
 		if ck_pkt!=ck_calc:
-			print "Checksum mismatch !"
+			print ("Checksum mismatch !")
 			return (0, 0, 0, "")
 		return ord(pkt[1]), ord(pkt[2]), ord(pkt[3]), pkt[4:-2] # addr, cmd, param, data
 
 	
 	def tx(self, dev, cmd, param, data=""):
-		pkt = pack("<BBBB", len(data)+2, dev, cmd, param)+data
-		pkt = "\x55\xAA" + pkt + pack("<H", checksum(pkt))
+		pkt = pack("<BBBB", len(data)+2, dev, cmd, param)+ str.encode(data)
+		pkt = str.encode("\x55\xAA") + pkt + pack("<H", checksum(pkt))
 		if self.dump:
-			print ">", hexlify(pkt)
+			print ( ">", hexlify(pkt))
 		self.com.write(pkt)
 
 	################# ESC commands ############################
